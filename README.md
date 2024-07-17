@@ -3,6 +3,21 @@
 > Specific Garten Management for our group
 
 
+## Configuration
+
+Configuration is done using environment variables:
+
+* `PORT`: Port for the HTTP endpoint (default `8080`, only change when running locally!)
+* `OAUTH_CALLBACK_BASE_URI`: Base URI for the OAuth callback (defaults to `http://localhost:8080`)
+* `GITHUB_OAUTH_CLIENT_ID`: GitHub OAuth Client ID (defaults to none and will disable GitHub authentication if not set)
+* `GITHUB_OAUTH_CLIENT_SECRET`: GitHub OAuth Client Secret (defaults to none and will disable GitHub authentication if not set)
+* `MYSQL_HOST`: MySQL host (defaults to `localhost`)
+* `MYSQL_PORT`: MySQL port (defaults to `3306`)
+* `MYSQL_DB`: MySQL database (defaults to `gartenplus`)
+* `MYSQL_USER`: MySQL user (defaults to `gartenplus`)
+* `MYSQL_PASS`: MySQL password
+
+
 ## Maintainers
 
 * Stefan Haun ([@penguineer](https://github.com/penguineer))
