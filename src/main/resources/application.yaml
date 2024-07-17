@@ -1,3 +1,48 @@
+server:
+  port: ${PORT:8080}
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: "health"
+  endpoint:
+    health:
+      enabled: true
+
 spring:
   application:
     name: gartenplus
+
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DB:gartenplus}
+    username: ${MYSQL_USER:gartenplus}
+    password: ${MYSQL_PASS}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${GITHUB_OAUTH_CLIENT_ID}
+            client-secret: ${GITHUB_OAUTH_CLIENT_SECRET}
+            scope: read:user
+            redirect-uri: "${OAUTH_CALLBACK_BASE_URI:http://localhost:8080}/login/oauth2/code/github"
+            authorization-grant-type: authorization_code
+            client-name: GitHub
+            provider: github
+        provider:
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
+            user-name-attribute: id
