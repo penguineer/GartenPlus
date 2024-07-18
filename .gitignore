@@ -5,8 +5,8 @@ target/
 
 .env
 
-/src/main/frontend/generated
-/src/main/bundles
+/frontend/generated
+vite.generated.ts
 
 ### STS ###
 .apt_generated
