@@ -42,7 +42,7 @@ jobs:
         restore-keys: ${{ runner.os }}-m2
 
     - name: Run Maven Build
-      run: mvn clean package -DskipTests
+      run: mvn clean package -DskipTests -Pproduction
 
     - name: Determine Docker tags
       id: meta
