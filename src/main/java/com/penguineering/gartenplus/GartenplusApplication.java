@@ -3,6 +3,8 @@ package com.penguineering.gartenplus;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.AppShellSettings;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -12,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableJpaRepositories
 @Push
 @EnableAsync
+@Theme(value = "gartenplus", variant = Lumo.DARK)
 public class GartenplusApplication implements AppShellConfigurator {
 
     public static void main(String[] args) {
