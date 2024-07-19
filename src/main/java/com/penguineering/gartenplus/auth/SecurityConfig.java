@@ -24,6 +24,7 @@ public class SecurityConfig extends VaadinWebSecurity {
 
         // Allow unauthenticated access to Health Endpoint and logo
         http.authorizeHttpRequests(auth -> auth
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/assets/github-mark-white.svg")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/actuator/health")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/assets/GartenPlusLogo.png")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/assets/GartenPlusLogoRounded.png")).permitAll()
