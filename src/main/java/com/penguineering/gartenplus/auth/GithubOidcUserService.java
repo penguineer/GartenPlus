@@ -5,7 +5,7 @@ import com.penguineering.gartenplus.auth.mapping.OidcMappingKey;
 import com.penguineering.gartenplus.auth.mapping.OidcMappingRepository;
 import com.penguineering.gartenplus.auth.user.UserDTO;
 import com.penguineering.gartenplus.auth.user.UserEntity;
-import com.penguineering.gartenplus.auth.user.UserRepository;
+import com.penguineering.gartenplus.auth.user.UserEntityService;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -18,13 +18,13 @@ import java.util.Optional;
 @Service
 public class GithubOidcUserService extends DefaultOAuth2UserService {
     private final OidcMappingRepository oidcMappingRepository;
-    private final UserRepository userRepository;
+    private final UserEntityService userEntityService;
 
     public GithubOidcUserService(
             OidcMappingRepository oidcMappingRepository,
-            UserRepository userRepository) {
+            UserEntityService userEntityService) {
         this.oidcMappingRepository = oidcMappingRepository;
-        this.userRepository = userRepository;
+        this.userEntityService = userEntityService;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class GithubOidcUserService extends DefaultOAuth2UserService {
                 .map(this::toMappingKey)
                 .flatMap(oidcMappingRepository::findById)
                 .map(OidcMapping::getUserId)
-                .flatMap(userRepository::findById);
+                .flatMap(userEntityService::getUser);
     }
 
     private UserDTO createUser(OAuth2User origin) {
@@ -73,7 +73,7 @@ public class GithubOidcUserService extends DefaultOAuth2UserService {
         Optional.ofNullable(origin_avatar_url)
                 .map(URI::create)
                 .ifPresent(userEntity::setAvatarUrl);
-        UserEntity savedUserEntity = userRepository.save(userEntity);
+        UserEntity savedUserEntity = userEntityService.save(userEntity);
 
         OidcMapping oidcMapping = new OidcMapping();
         oidcMapping.setIssuer("github");
@@ -96,6 +96,6 @@ public class GithubOidcUserService extends DefaultOAuth2UserService {
                         .map(URI::create)
                         .orElse(null));
 
-        return userRepository.save(user);
+        return userEntityService.save(user);
     }
 }
