@@ -34,6 +34,8 @@ public class GithubOidcUserService extends DefaultOAuth2UserService {
         try {
             // Custom logic to map GitHub user info to your application's user model
             return findUserByOriginId(origin)
+                    .map(user -> updateUserFromOIDC(origin, user))
+                    .map(UserEntity::toDTO)
                     .map(user -> new GartenplusUser(origin, user))
                     .orElseGet(() -> new GartenplusUser(origin, createUser(origin)));
         } catch (Exception e) {
@@ -48,14 +50,13 @@ public class GithubOidcUserService extends DefaultOAuth2UserService {
                 .orElseThrow(() -> new IllegalArgumentException("id attribute is missing"));
     }
 
-    private Optional<UserDTO> findUserByOriginId(OAuth2User origin) {
+    private Optional<UserEntity> findUserByOriginId(OAuth2User origin) {
         return Optional
                 .ofNullable(origin)
                 .map(this::toMappingKey)
                 .flatMap(oidcMappingRepository::findById)
                 .map(OidcMapping::getUserId)
-                .flatMap(userRepository::findById)
-                .map(UserEntity::toDTO);
+                .flatMap(userRepository::findById);
     }
 
     private UserDTO createUser(OAuth2User origin) {
@@ -81,5 +82,20 @@ public class GithubOidcUserService extends DefaultOAuth2UserService {
         oidcMappingRepository.save(oidcMapping);
 
         return savedUserEntity.toDTO();
+    }
+
+    private UserEntity updateUserFromOIDC(OAuth2User origin, UserEntity user) {
+        final String origin_name = origin.getAttribute("name");
+        final String origin_email = origin.getAttribute("email");
+        final String origin_avatar_url = origin.getAttribute("avatar_url");
+
+        user.setDisplayName(origin_name);
+        user.setEmail(origin_email);
+        user.setAvatarUrl(
+                Optional.ofNullable(origin_avatar_url)
+                        .map(URI::create)
+                        .orElse(null));
+
+        return userRepository.save(user);
     }
 }
