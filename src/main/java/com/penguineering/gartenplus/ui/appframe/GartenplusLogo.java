@@ -16,8 +16,8 @@ public class GartenplusLogo extends Div {
         Image logo = new Image(PATH, ALT);
         logo.setWidth(DIMENSIONS, Unit.PIXELS);
         logo.setHeight(DIMENSIONS, Unit.PIXELS);
-        Anchor link = new Anchor("", logo);
-
+        // FIXME this link fails if the user is not logged in
+        Anchor link = new Anchor("/", logo);
         add(link);
     }
 }
