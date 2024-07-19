@@ -28,3 +28,7 @@ vaadin-button.login-button {
     width: 768px;
     height: 128px;
 }
+
+vaadin-grid::part(header-cell) {
+    background-color: var(--lumo-tint-5pct);
+}
