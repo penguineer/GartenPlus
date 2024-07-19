@@ -11,3 +11,9 @@ vaadin-menu-bar-overlay[theme="icon"] {
     top: 64px !important;
 }
 
+
+vaadin-button.login-button {
+    font-size: 48px;
+    width: 768px;
+    height: 128px;
+}
