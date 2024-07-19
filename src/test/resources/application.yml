@@ -1,0 +1,17 @@
+management:
+  endpoints:
+    enabled-by-default: false
+
+spring:
+  application:
+    name: GartenPlus Test
+
+  datasource:
+    url: jdbc:hsqldb:mem:testdb;sql.syntax_mys=true
+    username: sa
+    password:
+    driverClassName: org.hsqldb.jdbc.JDBCDriver
+  jpa:
+    database-platform: org.hibernate.dialect.HSQLDialect
+    hibernate:
+      ddl-auto: create-drop
