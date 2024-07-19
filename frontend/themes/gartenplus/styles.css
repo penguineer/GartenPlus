@@ -1,5 +1,16 @@
 /* GartenPlus theme */
 
+html[theme="dark"] {
+    --lumo-primary-color: #4AAE50;
+    --lumo-secondary-color: #8D6E63;
+    --lumo-tertiary-color: #324A5F;
+    --lumo-base-color: #303030;
+    --lumo-header-color: var(--lumo-tertiary-color);
+    --lumo-body-text-color: #E0E0E0;
+    --lumo-primary-text-color: #AED9A5;
+    --lumo-error-color: #D32F2F;
+}
+
 vaadin-menu-bar-button[theme="icon"] {
     background: unset;
     color: var(--lumo-base-color) !important;
@@ -16,4 +27,8 @@ vaadin-button.login-button {
     font-size: 48px;
     width: 768px;
     height: 128px;
+}
+
+vaadin-grid::part(header-cell) {
+    background-color: var(--lumo-tint-5pct);
 }
