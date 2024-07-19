@@ -26,7 +26,7 @@ public class GartenplusHeader extends Div {
         headerLayout.getStyle()
                 .set("gap", "32px")
                 .set("padding", "16px 16px 8px 16px")
-                .set("background-color", "var(--lumo-base-color)")
+                .set("background-color", "var(--lumo-header-color)")
                 .set("border-bottom", "1px solid var(--lumo-contrast-20pct)");
 
         headerLayout.add(new GartenplusLogo());
