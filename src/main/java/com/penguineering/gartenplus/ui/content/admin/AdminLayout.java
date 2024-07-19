@@ -6,7 +6,6 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.ParentLayout;
 import com.vaadin.flow.router.RoutePrefix;
 import com.vaadin.flow.router.RouterLayout;
-import jakarta.annotation.security.PermitAll;
 
 @ParentLayout(AppFrameLayout.class)
 @RoutePrefix(value = "admin")

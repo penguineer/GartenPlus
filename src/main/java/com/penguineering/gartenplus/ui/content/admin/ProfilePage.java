@@ -1,6 +1,9 @@
 package com.penguineering.gartenplus.ui.content.admin;
 
+import com.penguineering.gartenplus.auth.group.GroupEntity;
 import com.penguineering.gartenplus.auth.user.UserDTO;
+import com.penguineering.gartenplus.auth.user.UserEntity;
+import com.penguineering.gartenplus.auth.user.UserEntityService;
 import com.penguineering.gartenplus.ui.appframe.GartenplusPage;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
@@ -20,8 +23,18 @@ import java.util.function.Supplier;
 @PermitAll
 @PageTitle("GartenPlus | Benutzerprofil")
 public class ProfilePage extends GartenplusPage {
-    public ProfilePage(@Qualifier("user") Supplier<UserDTO> currentUser) {
-        Optional<UserDTO> userOpt = Optional.of(currentUser).map(Supplier::get);
+    public ProfilePage(@Qualifier("user") Supplier<UserDTO> currentUser,
+                       UserEntityService userEntityService) {
+        // reload user from database with groups
+
+        Optional<UserEntity> userEntityOpt =
+                Optional.of(currentUser)
+                        .map(Supplier::get)
+                        .map(UserDTO::id)
+                        .flatMap(userEntityService::getUserWithGroups);
+        Optional<UserDTO> userOpt = userEntityOpt
+                .map(UserEntity::toDTO);
+
 
         add(new H2("Benutzerprofil"));
         add(new Paragraph("Folgende Daten wurden vom OIDC-Provider übernommen:"));
@@ -46,5 +59,14 @@ public class ProfilePage extends GartenplusPage {
         add(new Paragraph("Der Avatar wird oben rechts angezeigt."));
 
         add(new Paragraph("Die Daten können beim OIDC-Provider geändert werden."));
+
+        var groupString = userEntityOpt
+                .map(UserEntity::getGroups)
+                .flatMap(l -> l.stream()
+                        .map(GroupEntity::getName)
+                        .reduce((a, b) -> a + ", " + b))
+                .map(s -> "Du bist in folgenden Gruppen: " + s)
+                .orElse("Du bist in keinen Gruppen");
+        add(new Paragraph(groupString));
     }
 }
