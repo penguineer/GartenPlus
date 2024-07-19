@@ -1,1 +1,13 @@
 /* GartenPlus theme */
+
+vaadin-menu-bar-button[theme="icon"] {
+    background: unset;
+    color: var(--lumo-base-color) !important;
+    height: 100%;
+}
+
+vaadin-menu-bar-overlay[theme="icon"] {
+    z-index: 1000;
+    top: 64px !important;
+}
+

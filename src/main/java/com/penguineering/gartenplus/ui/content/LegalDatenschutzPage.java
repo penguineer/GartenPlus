@@ -1,14 +1,18 @@
-package com.penguineering.gartenplus.ui.appframe;
+package com.penguineering.gartenplus.ui.content;
 
+import com.penguineering.gartenplus.ui.appframe.AppFrameLayout;
+import com.penguineering.gartenplus.ui.appframe.GartenplusPage;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 @Route(value = "/datenschutz", layout = AppFrameLayout.class)
 @AnonymousAllowed
+@PageTitle("GartenPlus | Datenschutz")
 public class LegalDatenschutzPage extends GartenplusPage {
     public LegalDatenschutzPage() {
         add(new H2("Datenschutz"));

@@ -1,12 +1,16 @@
-package com.penguineering.gartenplus.ui.appframe;
+package com.penguineering.gartenplus.ui.content;
 
 
+import com.penguineering.gartenplus.ui.appframe.AppFrameLayout;
+import com.penguineering.gartenplus.ui.appframe.GartenplusPage;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 @Route(value = "/impressum", layout = AppFrameLayout.class)
 @AnonymousAllowed
+@PageTitle("GartenPlus | Impressum")
 public class LegalImpressumPage extends GartenplusPage {
 
     public LegalImpressumPage() {
