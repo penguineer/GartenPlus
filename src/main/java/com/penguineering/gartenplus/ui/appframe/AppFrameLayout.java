@@ -23,6 +23,9 @@ public class AppFrameLayout extends VerticalLayout implements RouterLayout {
         content = new Div();
         content.setId("gartenplus-content");
         content.setSizeFull();
+        content.getStyle()
+                // Adjust the 50px if the header height changes
+                .set("margin-top", "calc(50px + 32px + 16px)");
         add(content);
     }
 

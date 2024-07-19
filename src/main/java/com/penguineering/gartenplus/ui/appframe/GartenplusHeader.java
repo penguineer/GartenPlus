@@ -24,7 +24,10 @@ public class GartenplusHeader extends Div {
         headerLayout.setId("gartenplus-header");
         headerLayout.setWidthFull();
         headerLayout.getStyle()
-                .set("gap", "32px");
+                .set("gap", "32px")
+                .set("padding", "16px 16px 8px 16px")
+                .set("background-color", "var(--lumo-base-color)")
+                .set("border-bottom", "1px solid var(--lumo-contrast-20pct)");
 
         headerLayout.add(new GartenplusLogo());
 
@@ -68,7 +71,31 @@ public class GartenplusHeader extends Div {
 
         headerLayout.add(new LoggedUserView(currentUser));
 
-        this.add(headerLayout);
+        VerticalLayout fixedHeaderLayout = new VerticalLayout();
+        fixedHeaderLayout.setWidthFull();
+        fixedHeaderLayout.setPadding(false);
+        fixedHeaderLayout.setMargin(false);
+        fixedHeaderLayout.setSpacing(false);
+
+        // fix to the top of the screen
+        fixedHeaderLayout.getStyle()
+                .set("position", "fixed")
+                .set("top", "0")
+                .set("left", "0")
+                .set("right", "0")
+                .set("z-index", "1000");
+
+
+        fixedHeaderLayout.add(headerLayout);
+
+        Div fader = new Div();
+        fader.setWidthFull();
+        fader.getStyle()
+                .set("background", "linear-gradient(180deg, var(--lumo-base-color) 0%, rgba(255, 255, 255, 0) 100%)")
+                .set("height", "32px");
+        fixedHeaderLayout.add(fader);
+
+        this.add(fixedHeaderLayout);
     }
 
     private static String findVersion() {
