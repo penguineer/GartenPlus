@@ -1,6 +1,8 @@
 package com.penguineering.gartenplus.ui.content.admin;
 
 import com.penguineering.gartenplus.auth.group.GroupEntity;
+import com.penguineering.gartenplus.auth.role.SystemRole;
+import com.penguineering.gartenplus.auth.role.SystemRoleService;
 import com.penguineering.gartenplus.auth.user.UserDTO;
 import com.penguineering.gartenplus.auth.user.UserEntity;
 import com.penguineering.gartenplus.auth.user.UserEntityService;
@@ -24,7 +26,8 @@ import java.util.function.Supplier;
 @PageTitle("GartenPlus | Benutzerprofil")
 public class ProfilePage extends GartenplusPage {
     public ProfilePage(@Qualifier("user") Supplier<UserDTO> currentUser,
-                       UserEntityService userEntityService) {
+                       UserEntityService userEntityService,
+                       SystemRoleService systemRoleService) {
         // reload user from database with groups
 
         Optional<UserEntity> userEntityOpt =
@@ -68,5 +71,15 @@ public class ProfilePage extends GartenplusPage {
                 .map(s -> "Du bist in folgenden Gruppen: " + s)
                 .orElse("Du bist in keinen Gruppen");
         add(new Paragraph(groupString));
+
+        var roleString = userEntityOpt
+                .map(UserEntity::getId)
+                .map(systemRoleService::getRolesForUser)
+                .flatMap(l -> l.stream()
+                        .map(SystemRole::getDisplayName)
+                        .reduce((a, b) -> a + ", " + b))
+                .map(s -> "Du hast folgende Rollen: " + s)
+                .orElse("Du hast keine Rollen");
+        add(new Paragraph(roleString));
     }
 }

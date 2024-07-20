@@ -1,8 +1,10 @@
 package com.penguineering.gartenplus.ui.content.admin.settings.users;
 
+import com.penguineering.gartenplus.auth.role.SystemRole;
 import com.penguineering.gartenplus.auth.user.UserDTO;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -12,19 +14,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.net.URI;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.function.Consumer;
+import java.util.*;
+import java.util.function.BiConsumer;
 
 public class UserEditor extends VerticalLayout {
-    private final Consumer<UserDTO> saveAction;
+    private final BiConsumer<UserDTO, Set<SystemRole>> saveAction;
     private final Runnable cancelAction;
 
     private final Binder<UserBean> binder = new Binder<>(UserBean.class);
     private UserBean user;
 
+    private final CheckboxGroup<SystemRole> rolesCheckgroup;
+
     public UserEditor(
-            Consumer<UserDTO> saveAction,
+            BiConsumer<UserDTO, Set<SystemRole>> saveAction,
             Runnable cancelAction
     ) {
         this.saveAction = saveAction;
@@ -51,7 +54,14 @@ public class UserEditor extends VerticalLayout {
         TextField avatarUrl = new TextField("Avatar-URL");
         avatarUrl.setWidthFull();
 
-        fieldsLayout.add(id, displayName, email, avatarUrl);
+        rolesCheckgroup = new CheckboxGroup<>();
+        rolesCheckgroup.setLabel("System-Rollen");
+        rolesCheckgroup.setItems(SystemRole.values());
+        rolesCheckgroup.setItemLabelGenerator(SystemRole::getDisplayName);
+        rolesCheckgroup.addValueChangeListener(e -> user.setRoles(e.getValue()));
+        rolesCheckgroup.setReadOnly(Objects.isNull(saveAction));
+
+        fieldsLayout.add(id, displayName, email, avatarUrl, rolesCheckgroup);
 
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         buttonsLayout.setWidthFull();
@@ -79,16 +89,21 @@ public class UserEditor extends VerticalLayout {
                 .bind(UserBean::getDisplayName, null);
         binder.forField(email).bind(UserBean::getEmail, null);
         binder.forField(avatarUrl).bind(UserBean::getAvatarUrl, null);
+        binder.forField(rolesCheckgroup).bind(UserBean::getRoles, UserBean::setRoles);
 
-        setUser(null);
+        setUser(null, null);
     }
 
-    public void setUser(UserDTO userDTO) {
+    public void setUser(UserDTO userDTO, Set<SystemRole> roles) {
         this.user = Objects.isNull(userDTO)
                 ? new UserBean(null, "", "", "")
                 : new UserBean(userDTO.id().toString(), userDTO.displayName(), userDTO.email(), userDTO.avatarUrl().toASCIIString());
+        this.user.setRoles(
+                new HashSet<>(
+                        Objects.requireNonNullElse(roles, Set.of())));
 
         binder.readBean(user);
+        rolesCheckgroup.setValue(this.user.getRoles());
     }
 
     private void save() {
@@ -99,7 +114,7 @@ public class UserEditor extends VerticalLayout {
                         user.getId() == null ? null : UUID.fromString(user.getId()),
                         user.getDisplayName(), user.getEmail(),
                         user.getAvatarUrl() == null ? null : URI.create(user.getAvatarUrl()));
-                this.saveAction.accept(newUser);
+                this.saveAction.accept(newUser, user.getRoles());
             }
         } catch (ValidationException e) {
             // Handle validation errors
@@ -119,12 +134,14 @@ public class UserEditor extends VerticalLayout {
         private String displayName;
         private String email;
         private String avatarUrl;
+        private Set<SystemRole> roles;
 
         public UserBean(String id, String displayName, String email, String avatarUrl) {
             this.id = id;
             this.displayName = displayName;
             this.email = email;
             this.avatarUrl = avatarUrl;
+            this.roles = new HashSet<>();
         }
     }
 }
