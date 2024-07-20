@@ -46,3 +46,7 @@ spring:
             token-uri: https://github.com/login/oauth/access_token
             user-info-uri: https://api.github.com/user
             user-name-attribute: id
+
+gartenplus:
+  security:
+    auto-admin: ${ASSIGN_ADMINISTRATOR_IF_MISSING:false}

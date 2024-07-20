@@ -8,6 +8,7 @@
 Configuration is done using environment variables:
 
 * `PORT`: Port for the HTTP endpoint (default `8080`, only change when running locally!)
+* `ASSIGN_ADMINISTRATOR_IF_MISSING`: Make everyone an Administrator if none is found in the database (default `false`)
 * `OAUTH_CALLBACK_BASE_URI`: Base URI for the OAuth callback (defaults to `http://localhost:8080`)
 * `GITHUB_OAUTH_CLIENT_ID`: GitHub OAuth Client ID (defaults to none and will disable GitHub authentication if not set)
 * `GITHUB_OAUTH_CLIENT_SECRET`: GitHub OAuth Client Secret (defaults to none and will disable GitHub authentication if not set)
