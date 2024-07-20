@@ -2,6 +2,7 @@ package com.penguineering.gartenplus.ui.appframe;
 
 import com.penguineering.gartenplus.ApplicationContextProvider;
 import com.penguineering.gartenplus.auth.user.UserDTO;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
@@ -20,24 +21,20 @@ public class GartenplusHeader extends Div {
         setWidthFull();
         getStyle().set("display", "contents");
 
-        HorizontalLayout headerLayout = new HorizontalLayout();
-        headerLayout.setId("gartenplus-header");
-        headerLayout.setWidthFull();
-        headerLayout.getStyle()
-                .set("gap", "32px")
-                .set("padding", "16px 16px 8px 16px")
-                .set("background-color", "var(--lumo-header-color)")
-                .set("border-bottom", "1px solid var(--lumo-contrast-20pct)");
+        if (DeviceUtil.isMobile()) {
+            initMobileHeader(currentUser);
+        } else {
+            initBrowserHeader(currentUser);
+        }
+    }
 
-        headerLayout.add(new GartenplusLogo());
-
+    private Component createHeadline() {
         HorizontalLayout headlineLayout = new HorizontalLayout();
         headlineLayout.setPadding(false);
         headlineLayout.setMargin(false);
         headlineLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
         headlineLayout.getStyle()
                 .set("gap", "16px");
-        headerLayout.add(headlineLayout);
 
         headlineLayout.add(new H1("GartenPlus"));
 
@@ -49,11 +46,10 @@ public class GartenplusHeader extends Div {
                 .set("font-size", "var(--lumo-font-size-xs)");
         headlineLayout.add(versionSpan);
 
-        Div spacer = new Div();
-        spacer.setWidthFull();
-        headerLayout.add(spacer);
-        headerLayout.setFlexGrow(1, spacer);
+        return headlineLayout;
+    }
 
+    private Component createLegalLinks() {
         VerticalLayout legalLayout = new VerticalLayout();
         legalLayout.setWidth("auto");
         legalLayout.setPadding(false);
@@ -67,7 +63,28 @@ public class GartenplusHeader extends Div {
         legalLayout.add(new Anchor("/impressum", "Impressum"));
         legalLayout.add(new Anchor("/datenschutz", "Datenschutzerklärung"));
 
-        headerLayout.add(legalLayout);
+        return legalLayout;
+    }
+
+    private void initBrowserHeader(Supplier<UserDTO> currentUser) {
+        HorizontalLayout headerLayout = new HorizontalLayout();
+        headerLayout.setId("gartenplus-header");
+        headerLayout.setWidthFull();
+        headerLayout.getStyle()
+                .set("gap", "32px")
+                .set("padding", "16px 16px 8px 16px")
+                .set("background-color", "var(--lumo-header-color)")
+                .set("border-bottom", "1px solid var(--lumo-contrast-20pct)");
+
+        headerLayout.add(new GartenplusLogo());
+        headerLayout.add(createHeadline());
+
+        Div spacer = new Div();
+        spacer.setWidthFull();
+        headerLayout.add(spacer);
+        headerLayout.setFlexGrow(1, spacer);
+
+        headerLayout.add(createLegalLinks());
 
         headerLayout.add(new LoggedUserView(currentUser));
 
@@ -85,7 +102,6 @@ public class GartenplusHeader extends Div {
                 .set("right", "0")
                 .set("z-index", "1000");
 
-
         fixedHeaderLayout.add(headerLayout);
 
         Div fader = new Div();
@@ -96,6 +112,40 @@ public class GartenplusHeader extends Div {
         fixedHeaderLayout.add(fader);
 
         this.add(fixedHeaderLayout);
+    }
+
+    private void initMobileHeader(Supplier<UserDTO> currentUser) {
+        // Implement a simplified or different layout for mobile devices
+        VerticalLayout mobileHeaderLayout = new VerticalLayout();
+        mobileHeaderLayout.setWidthFull();
+        mobileHeaderLayout.setMargin(false);
+        mobileHeaderLayout.getStyle()
+                .set("padding", "8px")
+                .set("background-color", "var(--lumo-header-color)");
+
+        HorizontalLayout headlineLayout = new HorizontalLayout();
+        headlineLayout.setWidthFull();
+        headlineLayout.setPadding(false);
+        headlineLayout.setMargin(false);
+        headlineLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+
+        headlineLayout.add(new GartenplusLogo());
+        headlineLayout.add(createHeadline());
+        mobileHeaderLayout.add(headlineLayout);
+
+        HorizontalLayout menuLayout = new HorizontalLayout();
+        menuLayout.setWidthFull();
+        menuLayout.setPadding(false);
+        menuLayout.setMargin(false);
+        menuLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+
+        menuLayout.add(createLegalLinks());
+        menuLayout.add(new LoggedUserView(currentUser));
+
+        mobileHeaderLayout.add(menuLayout);
+
+
+        this.add(mobileHeaderLayout);
     }
 
     private static String findVersion() {

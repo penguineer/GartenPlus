@@ -58,6 +58,8 @@ public class LoggedUserView extends Div {
         subMenu.addItem(createMenuItemWithIcon("Profil", VaadinIcon.USER),
                 e -> navigateTo("/admin/profile"));
         subMenu.addSeparator();
+        subMenu.addItem(createMenuItemWithIcon("Dashboard", VaadinIcon.HOME),
+                e -> navigateTo("/"));
         subMenu.addItem(createMenuItemWithIcon("Einstellungen", VaadinIcon.COG),
                 e -> navigateTo("/admin/settings"));
         subMenu.addSeparator();
