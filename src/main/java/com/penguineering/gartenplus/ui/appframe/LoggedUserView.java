@@ -1,5 +1,6 @@
 package com.penguineering.gartenplus.ui.appframe;
 
+import com.penguineering.gartenplus.auth.role.SystemRole;
 import com.penguineering.gartenplus.auth.user.UserDTO;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -16,6 +17,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.net.URI;
 import java.util.Optional;
@@ -47,6 +50,11 @@ public class LoggedUserView extends Div {
                 .ifPresent(avatar::setImage);
 
 
+        // Check if the user has the ADMINISTRATOR role
+        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role -> role.equals(SystemRole.ADMINISTRATOR.asSpringRole()));
+
         // Set up the menu
         userMenu = new MenuBar();
         userMenu.addThemeVariants(MenuBarVariant.LUMO_ICON);
@@ -57,12 +65,19 @@ public class LoggedUserView extends Div {
 
         subMenu.addItem(createMenuItemWithIcon("Profil", VaadinIcon.USER),
                 e -> navigateTo("/admin/profile"));
+
         subMenu.addSeparator();
+
         subMenu.addItem(createMenuItemWithIcon("Dashboard", VaadinIcon.HOME),
                 e -> navigateTo("/"));
-        subMenu.addItem(createMenuItemWithIcon("Einstellungen", VaadinIcon.COG),
-                e -> navigateTo("/admin/settings"));
+
         subMenu.addSeparator();
+
+        if (isAdmin) {
+            subMenu.addItem(createMenuItemWithIcon("Einstellungen", VaadinIcon.COG),
+                    e -> navigateTo("/admin/settings"));
+        }
+
         subMenu.addItem(createMenuItemWithIcon("Abmelden", VaadinIcon.SIGN_OUT),
                 e -> navigateTo("/admin/logout"));
 
