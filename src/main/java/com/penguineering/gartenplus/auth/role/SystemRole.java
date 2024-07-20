@@ -15,4 +15,8 @@ public enum SystemRole {
         this.handle = handle;
         this.displayName = displayName;
     }
+
+    public final String asSpringRole() {
+        return "ROLE_" + handle.toUpperCase();
+    }
 }
