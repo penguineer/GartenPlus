@@ -1,5 +1,8 @@
 package com.penguineering.gartenplus.ui.content.admin.settings.users;
 
+import com.penguineering.gartenplus.auth.role.SystemRole;
+import com.penguineering.gartenplus.auth.role.SystemRoleService;
+import com.penguineering.gartenplus.auth.user.UserDTO;
 import com.penguineering.gartenplus.auth.user.UserEntity;
 import com.penguineering.gartenplus.auth.user.UserEntityService;
 import com.penguineering.gartenplus.ui.appframe.GartenplusPage;
@@ -10,6 +13,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -19,14 +23,18 @@ import java.util.function.Consumer;
 
 public class UsersSettingsPage extends GartenplusPage {
     private final UserEntityService userEntityService;
+    private final SystemRoleService systemRoleService;
 
     private final Consumer<Boolean> userEditorVisibility;
     private final UserEditor userEditor;
 
     private final UsersGrid usersGrid;
 
-    public UsersSettingsPage(UserEntityService userEntityService) {
+    public UsersSettingsPage(
+            UserEntityService userEntityService,
+            SystemRoleService systemRoleService) {
         this.userEntityService = userEntityService;
+        this.systemRoleService = systemRoleService;
 
         Div userEditorDiv = new Div();
         userEditorDiv.getStyle()
@@ -37,7 +45,7 @@ public class UsersSettingsPage extends GartenplusPage {
 
         userEditorDiv.add(new H3("Benutzer bearbeiten"));
 
-        userEditor = new UserEditor(null, this::closeUserEditor);
+        userEditor = new UserEditor(this::saveUser, this::closeUserEditor);
         userEditorDiv.add(userEditor);
 
 
@@ -58,16 +66,22 @@ public class UsersSettingsPage extends GartenplusPage {
         var user = userEntityService.getUser(userId)
                 .map(UserEntity::toDTO)
                 .orElse(null);
-        this.userEditor.setUser(user);
+        var roles = systemRoleService.getRolesForUser(userId);
+        this.userEditor.setUser(user, roles);
 
         this.userEditorVisibility.accept(true);
+    }
+
+    private void saveUser(UserDTO user, Set<SystemRole> roles) {
+        userEntityService.saveDTO(user);
+        systemRoleService.updateRoles(user.id(), roles);
+
+        closeUserEditor();
     }
 
     private void closeUserEditor() {
         this.userEditorVisibility.accept(false);
 
-        this.userEditor.setUser(null);
+        this.userEditor.setUser(null, null);
     }
-
-
 }
