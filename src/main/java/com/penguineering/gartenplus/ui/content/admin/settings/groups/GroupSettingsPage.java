@@ -9,7 +9,7 @@ import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import reactor.core.publisher.Mono;
 
 import java.util.Objects;
@@ -18,7 +18,7 @@ import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 @Route(value = "groups", layout = SettingsLayout.class)
-@PermitAll
+@RolesAllowed("ADMINISTRATOR")
 @PageTitle("GartenPlus | Einstellungen | Gruppen")
 public class GroupSettingsPage extends GartenplusPage {
     private final GroupRepository groupRepository;

@@ -3,6 +3,7 @@ package com.penguineering.gartenplus.auth;
 import com.penguineering.gartenplus.auth.mapping.OidcMapping;
 import com.penguineering.gartenplus.auth.mapping.OidcMappingKey;
 import com.penguineering.gartenplus.auth.mapping.OidcMappingRepository;
+import com.penguineering.gartenplus.auth.role.SystemRoleService;
 import com.penguineering.gartenplus.auth.user.UserDTO;
 import com.penguineering.gartenplus.auth.user.UserEntity;
 import com.penguineering.gartenplus.auth.user.UserEntityService;
@@ -14,17 +15,21 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class GithubOidcUserService extends DefaultOAuth2UserService {
     private final OidcMappingRepository oidcMappingRepository;
     private final UserEntityService userEntityService;
+    private final SystemRoleService systemRoleService;
 
     public GithubOidcUserService(
             OidcMappingRepository oidcMappingRepository,
-            UserEntityService userEntityService) {
+            UserEntityService userEntityService,
+            SystemRoleService systemRoleService) {
         this.oidcMappingRepository = oidcMappingRepository;
         this.userEntityService = userEntityService;
+        this.systemRoleService = systemRoleService;
     }
 
     @Override
@@ -36,8 +41,10 @@ public class GithubOidcUserService extends DefaultOAuth2UserService {
             return findUserByOriginId(origin)
                     .map(user -> updateUserFromOIDC(origin, user))
                     .map(UserEntity::toDTO)
-                    .map(user -> new GartenplusUser(origin, user))
-                    .orElseGet(() -> new GartenplusUser(origin, createUser(origin)));
+                    .flatMap(user -> Optional.of(user.id())
+                            .map(systemRoleService::getRolesForUser)
+                            .map(roles -> new GartenplusUser(origin, user, roles)))
+                    .orElseGet(() -> new GartenplusUser(origin, createUser(origin), Set.of()));
         } catch (Exception e) {
             throw new InternalAuthenticationServiceException("Problem during login", e);
         }

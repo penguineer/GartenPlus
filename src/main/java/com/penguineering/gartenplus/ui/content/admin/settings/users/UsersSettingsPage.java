@@ -11,14 +11,14 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
 @Route(value = "users", layout = SettingsLayout.class)
-@PermitAll
+@RolesAllowed("ADMINISTRATOR")
 @PageTitle("GartenPlus | Einstellungen | Benutzer")
 
 public class UsersSettingsPage extends GartenplusPage {
