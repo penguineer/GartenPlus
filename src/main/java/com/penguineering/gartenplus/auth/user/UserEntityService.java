@@ -6,8 +6,10 @@ import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.StreamSupport;
 
 @Service
 public class UserEntityService {
@@ -18,6 +20,13 @@ public class UserEntityService {
 
     public UserEntityService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Transactional
+    public List<UserDTO> getAllUsers() {
+        return StreamSupport.stream(userRepository.findAll().spliterator(), false)
+                .map(UserEntity::toDTO)
+                .toList();
     }
 
     @Transactional
