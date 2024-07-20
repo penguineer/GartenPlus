@@ -13,6 +13,6 @@ import jakarta.annotation.security.PermitAll;
 public class SettingsPage extends GartenplusPage implements BeforeEnterObserver {
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        event.getUI().navigate(event.getLocation().getPath() + "/groups");
+        event.getUI().navigate(event.getLocation().getPath() + "/users");
     }
 }
