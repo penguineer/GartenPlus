@@ -15,10 +15,7 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 
 @Route(value = "profile", layout = AdminLayout.class)
@@ -50,9 +47,9 @@ public class ProfilePage extends GartenplusPage {
 
         List<Map.Entry<String, String>> items = new ArrayList<>();
         userOpt.ifPresent(userDTO -> {
-            items.add(Map.entry("Name", userDTO.displayName()));
-            items.add(Map.entry("E-Mail-Adresse", userDTO.email()));
-            items.add(Map.entry("Avatar-URL", userDTO.avatarUrl().toASCIIString()));
+            items.add(Map.entry("Name", Objects.requireNonNullElse(userDTO.displayName(), "<leer>")));
+            items.add(Map.entry("E-Mail-Adresse", Objects.requireNonNullElse(userDTO.email(), "<leer>")));
+            items.add(Map.entry("Avatar-URL", userDTO.avatarUrl() == null ? "<leer>" : userDTO.avatarUrl().toASCIIString()));
         });
 
         grid.setItems(items);
