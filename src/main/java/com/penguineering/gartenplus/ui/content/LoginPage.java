@@ -38,6 +38,9 @@ public class LoginPage extends GartenplusPage {
 
         VerticalLayout buttons = new VerticalLayout();
         buttons.setWidth("unset");
+        buttons.getStyle()
+                .set("min-width", "50%")
+                .set("max-width", "100%");
         OIDC_PROVIDERS.stream()
                 .map(this::createButton)
                 .forEach(buttons::add);
@@ -45,7 +48,7 @@ public class LoginPage extends GartenplusPage {
     }
 
     private Button createButton(OIDCProvider provider) {
-        Button loginButton = new Button("Login with " + provider.name(),
+        Button loginButton = new Button(provider.name(),
                 event -> UI.getCurrent().getPage().setLocation("/oauth2/authorization/" + provider.handle()));
 
         loginButton.addClassName("login-button");
@@ -53,18 +56,8 @@ public class LoginPage extends GartenplusPage {
 
         Optional.ofNullable(provider.logo)
                 .map(Supplier::get)
-                .map(this::styleLogo)
                 .ifPresent(loginButton::setIcon);
 
         return loginButton;
-    }
-
-    private Image styleLogo(Image logo) {
-        logo.getStyle()
-                .set("width", "96px")
-                .set("height", "96px")
-                .set("margin-right", "64px");
-
-        return logo;
     }
 }
