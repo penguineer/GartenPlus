@@ -2,6 +2,7 @@ package com.penguineering.gartenplus.ui.content.admin.settings;
 
 import com.penguineering.gartenplus.ui.content.admin.AdminLayout;
 import com.penguineering.gartenplus.ui.content.admin.settings.groups.GroupSettingsPage;
+import com.penguineering.gartenplus.ui.content.admin.settings.users.UsersSettingsPage;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.UI;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class SettingsLayout extends VerticalLayout implements RouterLayout, BeforeEnterObserver {
     private static final Map<String, Class<? extends Component>> targets = new LinkedHashMap<>();
     static {
+        targets.put("Benutzer", UsersSettingsPage.class);
         targets.put("Gruppen", GroupSettingsPage.class);
     }
 
