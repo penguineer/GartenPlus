@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum SystemRole {
     ADMINISTRATOR("administrator", "Administrator"),
     MEMBER("member", "Gartenfreund"),
-    FRIEND("friend", "Gartenfreund-Freund");
+    FRIEND("friend", "Gartenfreund-Freund"),
+    TREASURER("treasurer", "Geldhüter");
 
     private final String handle;
     private final String displayName;
