@@ -1,7 +1,9 @@
 package com.penguineering.gartenplus.ui.content.admin.settings;
 
+import com.penguineering.gartenplus.auth.SecurityUtils;
 import com.penguineering.gartenplus.ui.content.admin.AdminLayout;
 import com.penguineering.gartenplus.ui.content.admin.settings.groups.GroupSettingsPage;
+import com.penguineering.gartenplus.ui.content.admin.settings.ledgers.LedgersSettingsPage;
 import com.penguineering.gartenplus.ui.content.admin.settings.users.UsersSettingsPage;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasElement;
@@ -15,14 +17,17 @@ import com.vaadin.flow.router.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @ParentLayout(AdminLayout.class)
 @RoutePrefix(value = "settings")
 public class SettingsLayout extends VerticalLayout implements RouterLayout, BeforeEnterObserver {
     private static final Map<String, Class<? extends Component>> targets = new LinkedHashMap<>();
+
     static {
         targets.put("Benutzer", UsersSettingsPage.class);
         targets.put("Gruppen", GroupSettingsPage.class);
+        targets.put("Hauptbücher", LedgersSettingsPage.class);
     }
 
     private final Div content;
@@ -31,8 +36,12 @@ public class SettingsLayout extends VerticalLayout implements RouterLayout, Befo
     public SettingsLayout() {
         super();
 
+        Set<String> userRoles = SecurityUtils.getCurrentUserRoles();
+
         menu = new Tabs();
-        targets.keySet().stream()
+        targets.entrySet().stream()
+                .filter(e -> SecurityUtils.isUserAuthorizedForComponent(e.getValue(), userRoles))
+                .map(Map.Entry::getKey)
                 .map(Tab::new)
                 .forEach(menu::add);
         menu.addSelectedChangeListener(this::navigateToTab);
