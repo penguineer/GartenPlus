@@ -8,12 +8,10 @@ import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.IconFactory;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +68,9 @@ public class LoggedUserView extends Div {
 
         subMenu.addItem(createMenuItemWithIcon("Dashboard", VaadinIcon.HOME),
                 e -> navigateTo("/"));
+
+        subMenu.addItem(createMenuItemWithIcon("Buchhaltung", VaadinIcon.PIGGY_BANK_COIN),
+                e -> navigateTo("/accounting"));
 
         subMenu.addSeparator();
 
