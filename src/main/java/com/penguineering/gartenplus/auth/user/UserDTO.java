@@ -17,10 +17,6 @@ public record UserDTO(
         @JsonProperty("email") String email,
         @JsonProperty("avatar_url") URI avatarUrl) {
 
-    public UserDTO {
-        Objects.requireNonNull(displayName, "displayName must not be null");
-    }
-
     @Override
     public String toString() {
         return displayName + "(" + id + ")";
