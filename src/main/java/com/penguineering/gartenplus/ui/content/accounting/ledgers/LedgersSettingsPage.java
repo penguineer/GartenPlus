@@ -1,9 +1,9 @@
-package com.penguineering.gartenplus.ui.content.admin.settings.ledgers;
+package com.penguineering.gartenplus.ui.content.accounting.ledgers;
 
 import com.penguineering.gartenplus.accounting.model.ledger.LedgerDTO;
 import com.penguineering.gartenplus.accounting.model.ledger.LedgerEntityService;
 import com.penguineering.gartenplus.ui.appframe.GartenplusPage;
-import com.penguineering.gartenplus.ui.content.admin.settings.SettingsLayout;
+import com.penguineering.gartenplus.ui.content.accounting.AccountingLayout;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.router.PageTitle;
@@ -13,9 +13,9 @@ import jakarta.annotation.security.RolesAllowed;
 import java.util.Optional;
 import java.util.UUID;
 
-@Route(value = "ledgers", layout = SettingsLayout.class)
+@Route(value = "ledgers", layout = AccountingLayout.class)
 @RolesAllowed({"ADMINISTRATOR", "TREASURER"})
-@PageTitle("GartenPlus | Einstellungen | Ledger")
+@PageTitle("GartenPlus | Buchhaltung | Ledger")
 public class LedgersSettingsPage extends GartenplusPage {
     private final LedgerEntityService ledgerService;
 
