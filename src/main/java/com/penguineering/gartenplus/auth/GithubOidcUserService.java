@@ -70,7 +70,7 @@ public class GithubOidcUserService extends DefaultOAuth2UserService {
         final String origin_id = Optional.ofNullable(origin.getAttribute("id"))
                 .map(Object::toString)
                 .orElseThrow(() -> new IllegalArgumentException("id attribute is missing"));
-        final String origin_name = origin.getAttribute("name");
+        final String origin_name = determineDisplayName(origin);
         final String origin_email = origin.getAttribute("email");
         final String origin_avatar_url = origin.getAttribute("avatar_url");
 
@@ -92,7 +92,7 @@ public class GithubOidcUserService extends DefaultOAuth2UserService {
     }
 
     private UserEntity updateUserFromOIDC(OAuth2User origin, UserEntity user) {
-        final String origin_name = origin.getAttribute("name");
+        final String origin_name = determineDisplayName(origin);
         final String origin_email = origin.getAttribute("email");
         final String origin_avatar_url = origin.getAttribute("avatar_url");
 
@@ -104,5 +104,12 @@ public class GithubOidcUserService extends DefaultOAuth2UserService {
                         .orElse(null));
 
         return userEntityService.save(user);
+    }
+
+    private String determineDisplayName(OAuth2User origin) {
+        return Optional.ofNullable(origin.getAttribute("name"))
+                .or(() -> Optional.ofNullable(origin.getAttribute("login")))
+                .map(String::valueOf)
+                .orElseThrow(() -> new IllegalArgumentException("Name and login attribute are missing"));
     }
 }
