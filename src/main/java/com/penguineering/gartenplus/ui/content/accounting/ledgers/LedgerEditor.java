@@ -1,4 +1,4 @@
-package com.penguineering.gartenplus.ui.content.admin.settings.ledgers;
+package com.penguineering.gartenplus.ui.content.accounting.ledgers;
 
 import com.penguineering.gartenplus.accounting.model.ledger.LedgerDTO;
 import com.vaadin.flow.component.button.Button;

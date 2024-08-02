@@ -3,7 +3,7 @@ package com.penguineering.gartenplus.ui.content.admin.settings;
 import com.penguineering.gartenplus.auth.SecurityUtils;
 import com.penguineering.gartenplus.ui.content.admin.AdminLayout;
 import com.penguineering.gartenplus.ui.content.admin.settings.groups.GroupSettingsPage;
-import com.penguineering.gartenplus.ui.content.admin.settings.ledgers.LedgersSettingsPage;
+import com.penguineering.gartenplus.ui.content.accounting.ledgers.LedgersSettingsPage;
 import com.penguineering.gartenplus.ui.content.admin.settings.users.UsersSettingsPage;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasElement;
