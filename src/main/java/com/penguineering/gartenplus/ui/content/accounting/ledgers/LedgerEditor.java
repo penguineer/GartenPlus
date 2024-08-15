@@ -115,7 +115,7 @@ public class LedgerEditor extends VerticalLayout {
 
         public LedgerDTO toDTO() {
             return new LedgerDTO(
-                    id == null ? null : UUID.fromString(id),
+                    id == null || id.isBlank() ? null : UUID.fromString(id),
                     name, startDate, endDate, closed);
         }
     }
