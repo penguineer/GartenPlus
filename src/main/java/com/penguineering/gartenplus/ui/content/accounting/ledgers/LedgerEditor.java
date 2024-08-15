@@ -57,6 +57,8 @@ public class LedgerEditor extends VerticalLayout {
         datesLayout.setWidthFull();
         datesLayout.setPadding(false);
         datesLayout.getStyle()
+                .set("display", "flex")
+                .set("flex-wrap", "wrap")
                 .set("gap", "16px");
 
         startDate = new DatePicker("Erster Geschäftstag");
