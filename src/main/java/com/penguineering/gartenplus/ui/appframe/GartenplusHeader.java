@@ -16,10 +16,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class GartenplusHeader extends Div {
+public class GartenplusHeader extends VerticalLayout {
     public GartenplusHeader(Supplier<UserDTO> currentUser) {
+        setId("gartenplus-header");
+
         setWidthFull();
-        getStyle().set("display", "contents");
+        setPadding(false);
+        setMargin(false);
+        setSpacing(false);
+
 
         if (DeviceUtil.isMobile()) {
             initMobileHeader(currentUser);
@@ -68,7 +73,8 @@ public class GartenplusHeader extends Div {
 
     private void initBrowserHeader(Supplier<UserDTO> currentUser) {
         HorizontalLayout headerLayout = new HorizontalLayout();
-        headerLayout.setId("gartenplus-header");
+        add(headerLayout);
+
         headerLayout.setWidthFull();
         headerLayout.getStyle()
                 .set("gap", "32px")
@@ -87,31 +93,6 @@ public class GartenplusHeader extends Div {
         headerLayout.add(createLegalLinks());
 
         headerLayout.add(new LoggedUserView(currentUser));
-
-        VerticalLayout fixedHeaderLayout = new VerticalLayout();
-        fixedHeaderLayout.setWidthFull();
-        fixedHeaderLayout.setPadding(false);
-        fixedHeaderLayout.setMargin(false);
-        fixedHeaderLayout.setSpacing(false);
-
-        // fix to the top of the screen
-        fixedHeaderLayout.getStyle()
-                .set("position", "fixed")
-                .set("top", "0")
-                .set("left", "0")
-                .set("right", "0")
-                .set("z-index", "1000");
-
-        fixedHeaderLayout.add(headerLayout);
-
-        Div fader = new Div();
-        fader.setWidthFull();
-        fader.getStyle()
-                .set("background", "linear-gradient(180deg, var(--lumo-base-color) 0%, rgba(255, 255, 255, 0) 100%)")
-                .set("height", "32px");
-        fixedHeaderLayout.add(fader);
-
-        this.add(fixedHeaderLayout);
     }
 
     private void initMobileHeader(Supplier<UserDTO> currentUser) {

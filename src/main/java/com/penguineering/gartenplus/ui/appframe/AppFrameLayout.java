@@ -17,7 +17,7 @@ public class AppFrameLayout extends VerticalLayout implements RouterLayout {
         setId("gartenplus-app");
         setPadding(false);
         setMargin(false);
-
+        setSpacing(false);
 
         GartenplusHeader header = new GartenplusHeader(currentUser);
         add(header);
@@ -25,10 +25,6 @@ public class AppFrameLayout extends VerticalLayout implements RouterLayout {
         content = new Div();
         content.setId("gartenplus-content");
         content.setSizeFull();
-        content.getStyle()
-                .set("padding", "16px")
-                // Adjust the 50px if the header height changes
-                .set("margin-top", DeviceUtil.isMobile() ? "0px" : "calc(50px + 32px + 16px)");
         add(content);
     }
 
