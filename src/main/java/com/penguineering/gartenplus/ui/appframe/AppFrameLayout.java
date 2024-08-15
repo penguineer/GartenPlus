@@ -18,6 +18,12 @@ public class AppFrameLayout extends VerticalLayout implements RouterLayout {
         setPadding(false);
         setMargin(false);
         setSpacing(false);
+        setSizeFull();
+
+        if (!DeviceUtil.isMobile())
+            getStyle()
+                    .set("display", "flex")
+                    .set("flex-direction", "column");
 
         GartenplusHeader header = new GartenplusHeader(currentUser);
         add(header);
@@ -25,6 +31,12 @@ public class AppFrameLayout extends VerticalLayout implements RouterLayout {
         content = new Div();
         content.setId("gartenplus-content");
         content.setSizeFull();
+        if (!DeviceUtil.isMobile())
+            content.getStyle()
+                    .set("flex-grow", "1")
+                    .set("overflow", "auto")
+                    .set("overflow-y", "scroll"); /* Always show vertical scrollbar */
+
         add(content);
     }
 

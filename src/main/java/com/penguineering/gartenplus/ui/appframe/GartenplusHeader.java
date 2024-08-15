@@ -55,6 +55,9 @@ public class GartenplusHeader extends VerticalLayout {
     }
 
     private Component createLegalLinks() {
+        getStyle()
+                .set("flex-shrink", "0");
+
         VerticalLayout legalLayout = new VerticalLayout();
         legalLayout.setWidth("auto");
         legalLayout.setPadding(false);
